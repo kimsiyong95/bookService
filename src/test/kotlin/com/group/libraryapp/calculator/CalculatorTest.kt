@@ -5,7 +5,7 @@ fun main(){
     val calculatorTest = CalculatorTest()
     calculatorTest.addTest()
     calculatorTest.minusTest()
-    calculatorTest.multiplyTest()
+//    calculatorTest.multiplyTest()
 }
 
 class CalculatorTest {
