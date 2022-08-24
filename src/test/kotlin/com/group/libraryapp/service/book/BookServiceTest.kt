@@ -1,6 +1,6 @@
 package com.group.libraryapp.service.book
 
-import com.group.libraryapp.domain.Book
+import com.group.libraryapp.domain.book.Book
 import com.group.libraryapp.domain.book.BookRepository
 import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
@@ -73,7 +73,13 @@ class BookServiceTest @Autowired constructor (
         //given
         bookRepository.save(Book("mysql"))
         val saveUser = userRepository.save(User("김시용", null))
-        userLoanHistoryRepository.save(UserLoanHistory(saveUser, "mysql", false))
+        userLoanHistoryRepository.save(
+            UserLoanHistory(
+                saveUser,
+                "mysql",
+                false
+            )
+        )
         val request = BookLoanRequest("김시용", "mysql")
 
         //when & then
@@ -91,7 +97,13 @@ class BookServiceTest @Autowired constructor (
         //given
         bookRepository.save(Book("mysql"))
         val saveUser = userRepository.save(User("김시용", null))
-        userLoanHistoryRepository.save(UserLoanHistory(saveUser, "mysql", false))
+        userLoanHistoryRepository.save(
+            UserLoanHistory(
+                saveUser,
+                "mysql",
+                false
+            )
+        )
         val request = BookReturnRequest("김시용", "mysql")
 
         //when
