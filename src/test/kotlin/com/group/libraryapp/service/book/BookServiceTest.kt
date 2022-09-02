@@ -7,6 +7,7 @@ import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
 import com.group.libraryapp.domain.user.loanhistory.UserLoanHistory
 import com.group.libraryapp.domain.user.loanhistory.UserLoanHistoryRepository
+import com.group.libraryapp.domain.user.loanhistory.UserLoanStatus
 import com.group.libraryapp.dto.book.request.BookLoanRequest
 import com.group.libraryapp.dto.book.request.BookRequest
 import com.group.libraryapp.dto.book.request.BookReturnRequest
@@ -66,7 +67,7 @@ class BookServiceTest @Autowired constructor (
         assertThat(results).hasSize(1)
         assertThat(results[0].bookName).isEqualTo("mysql")
         assertThat(results[0].user.id).isEqualTo(saveUser.id)
-        assertThat(results[0].isReturn).isFalse
+        assertThat(results[0].status).isEqualTo(UserLoanStatus.LOANED)
     }
 
     @Test
@@ -76,10 +77,9 @@ class BookServiceTest @Autowired constructor (
         bookRepository.save(Book.fixture("mysql"))
         val saveUser = userRepository.save(User("김시용", null))
         userLoanHistoryRepository.save(
-            UserLoanHistory(
+            UserLoanHistory.fixture(
                 saveUser,
-                "mysql",
-                false
+                "mysql"
             )
         )
         val request = BookLoanRequest("김시용", "mysql")
@@ -88,7 +88,7 @@ class BookServiceTest @Autowired constructor (
         val message = assertThrows<IllegalArgumentException> {
             bookService.loanBook(request)
         }.message
-        
+
         assertThat(message).isEqualTo("진작 대출되어 있는 책입니다")
 
     }
@@ -100,10 +100,9 @@ class BookServiceTest @Autowired constructor (
         bookRepository.save(Book.fixture("mysql"))
         val saveUser = userRepository.save(User("김시용", null))
         userLoanHistoryRepository.save(
-            UserLoanHistory(
+            UserLoanHistory.fixture(
                 saveUser,
-                "mysql",
-                false
+                "mysql"
             )
         )
         val request = BookReturnRequest("김시용", "mysql")
@@ -114,7 +113,7 @@ class BookServiceTest @Autowired constructor (
         //then
         val results = userLoanHistoryRepository.findAll()
         assertThat(results).hasSize(1)
-        assertThat(results[0].isReturn).isTrue
+        assertThat(results[0].status).isEqualTo(UserLoanStatus.RETURNED)
     }
 
 
